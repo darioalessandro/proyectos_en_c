@@ -38,10 +38,7 @@ char * encrypt(char * plain_text,int * key, int key_length){
 	char * encrypted_text= calloc(plain_text_length, sizeof(char));
 	for(int i=0; i<number_of_blocks;i++){		
 		for(int j=0;j<key_length;j++){	
-			int encrypted_text_index= i * key_length + j;	
-			if(encrypted_text_index==plain_text_length){				
-				break;	
-			}
+			int encrypted_text_index= i * key_length + j;				
 			int plain_text_index= i * key_length + key[j];			
 			encrypted_text[encrypted_text_index]= plain_text[plain_text_index];
 		}
@@ -55,10 +52,7 @@ char * decrypt(char * encrypted_text,int * key, int key_length){
 	char * decrypted_text= calloc(encrypted_text_length, sizeof(char));
 	for(int i=0; i<number_of_blocks;i++){		
 		for(int j=0;j<key_length;j++){	
-			int decrypted_text_index= i * key_length + j;				
-			if(decrypted_text_index==encrypted_text_length){				
-				break;	
-			}
+			int decrypted_text_index= i * key_length + j;							
 			int encrypted_text_index= i * key_length + index_of(j,key,key_length);			
 			decrypted_text[decrypted_text_index]= encrypted_text[encrypted_text_index];			
 		}
@@ -74,10 +68,8 @@ int main(){
 	char * encrypt(char * plain_text,int * key, int key_length);
 	char * decrypt(char * encrypted_text,int * key, int key_length);
 	
-
-
 	//1) Plain Text	
-	char * plain_text= "012345678912345";
+	char * plain_text= "Metallica es una banda de thrash metal originaria de Los Ángeles, pero con base en San Francisco desde febrero de 1983. Fue fundada en 1981 en Los Ángeles por el danés Lars Ulrich y James Hetfield, a los que se les unirían Lloyd Grant y Ron McGovney. Estos dos músicos fueron después sustituidos por el guitarrista Dave Mustaine y el bajista Cliff Burton, Mustaine fue despedido un año después de ingresar en la banda debido a su excesiva adicción al alcohol y su actitud violenta, y fundó la banda Megadeth, siendo sustituido por Kirk Hammett ex guitarrista de Exodus. Por otra parte, en 1986, la muerte de Cliff Burton en un accidente de autobús en Suecia provocó la entrada al grupo de Jason Newsted,2 quien, tras su abandono quince años más tarde, sería sustituido por el bajista actual, Robert Trujillo.";
 	printf("Plain text: %s\n\n", plain_text);	
 	
 	//2) Define key
@@ -94,9 +86,19 @@ int main(){
 	char * decrypted_text= decrypt(encrypted_text,key,key_length);
 	printf("Decrypted text: %s\n\n", decrypted_text);
 
-	//Clean up everything that you own, (memory reserved with calloc & malloc)	
+	//5) Verification
+	int success= strcmp(normalized_plain_text, decrypted_text);
+	if(success==0){
+		printf("It works.\n\n");
+	}else{
+		printf("#fail\n\n");
+	}
+
+	//Clean up everything that you own, (memory reserved with calloc, strdup & malloc)	
 	free(encrypted_text);
 	free(decrypted_text);
 	free(normalized_plain_text);
-	return 0;
+
+
+	return success;
 } 
