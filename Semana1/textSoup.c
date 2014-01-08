@@ -70,7 +70,7 @@ int main(){
 	const clock_t initial_clock = clock();
 	
 	//1) Plain Text	
-	char * plain_text= "Este es el mens";
+	char * plain_text= "Este es el mensaje que quiero proteger.";
 	printf("Plain text: %s\n\n", plain_text);	
 	
 	//2) Define encryption key
