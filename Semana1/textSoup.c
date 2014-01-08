@@ -69,13 +69,13 @@ int main(){
 	char * encrypt(char * plain_text,int * key, int key_length);
 	char * decrypt(char * encrypted_text,int * key, int key_length);
 	
-	const clock_t initial_time = clock();
+	const clock_t initial_clock = clock();
 	
 	//1) Plain Text	
 	char * plain_text= "Metallica es una banda de thrash metal originaria de Los Ángeles, pero con base en San Francisco desde febrero de 1983. Fue fundada en 1981 en Los Ángeles por el danés Lars Ulrich y James Hetfield, a los que se les unirían Lloyd Grant y Ron McGovney. Estos dos músicos fueron después sustituidos por el guitarrista Dave Mustaine y el bajista Cliff Burton, Mustaine fue despedido un año después de ingresar en la banda debido a su excesiva adicción al alcohol y su actitud violenta, y fundó la banda Megadeth, siendo sustituido por Kirk Hammett ex guitarrista de Exodus. Por otra parte, en 1986, la muerte de Cliff Burton en un accidente de autobús en Suecia provocó la entrada al grupo de Jason Newsted,2 quien, tras su abandono quince años más tarde, sería sustituido por el bajista actual, Robert Trujillo.";
 	printf("Plain text: %s\n\n", plain_text);	
 	
-	//2) Define key
+	//2) Define encryption key
 	int key[]={3,9,12,0,11,1,4,13,5,7,14,8,10,2,6};
 	int key_length=sizeof(key)/sizeof(key[0]);	
 
@@ -101,7 +101,7 @@ int main(){
 	free(encrypted_text);
 	free(decrypted_text);
 	free(normalized_plain_text);
-	float clocks_diff= (float) clock() - initial_time;	
+	float clocks_diff= (float) clock() - initial_clock;	
 	printf("Processing time %f seconds\n", clocks_diff/CLOCKS_PER_SEC);
 	return success;
 } 
