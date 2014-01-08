@@ -22,17 +22,6 @@ char * normalize_plain_text_to_be_key_length_multiple(char * plain_text, int * k
 	return normalized_plain_text;
 }
 
-int index_of(int j,int * key, int key_length){
-	int index_of=0;
-	for(int i=0;i<key_length;i++){
-		if(key[i]==j){
-			index_of=i;
-			break;	
-		}		
-	}
-	return index_of;
-}
-
 char * encrypt(char * plain_text,int * key, int key_length){	
 	int plain_text_length=strlen(plain_text);	
 	int number_of_blocks= (int) ceilf(((float)plain_text_length/(float)key_length));
@@ -47,28 +36,9 @@ char * encrypt(char * plain_text,int * key, int key_length){
 	return encrypted_text;
 }
 
-char * decrypt(char * encrypted_text,int * key, int key_length){
-	int encrypted_text_length=strlen(encrypted_text);	
-	int number_of_blocks= (int) ceil(((float)encrypted_text_length/(float)key_length));	
-	char * decrypted_text= calloc(encrypted_text_length, sizeof(char));
-	for(int i=0; i<number_of_blocks;i++){		
-		for(int j=0;j<key_length;j++){	
-			int decrypted_text_index= i * key_length + j;							
-			int encrypted_text_index= i * key_length + index_of(j,key,key_length);			
-			decrypted_text[decrypted_text_index]= encrypted_text[encrypted_text_index];			
-		}
-	}
-	return decrypted_text;
-}
-
 int main(){	
-	char * normalize_plain_text_to_be_key_length_multiple(char * plain_text, int * key, int key_length);	
-	int index_of(int j,int * key, int key_length);
-	char * encrypt(char * plain_text,int * key, int key_length);
-	char * decrypt(char * encrypted_text,int * key, int key_length);
-	
-	const clock_t initial_clock = clock();
-	
+	char * normalize_plain_text_to_be_key_length_multiple(char * plain_text, int * key, int key_length);		
+	char * encrypt(char * plain_text,int * key, int key_length);		
 	//1) Plain Text	
 	char * plain_text= "Este es el mensaje que quiero proteger.";
 	printf("--Text Soup--\n\n");	
@@ -84,23 +54,8 @@ int main(){
 	char * encrypted_text= encrypt(normalized_plain_text,key,key_length);
 	printf("Encrypted text: %s\n\n", encrypted_text);
 
-	//4) Decryption
-	char * decrypted_text= decrypt(encrypted_text,key,key_length);
-	printf("Decrypted text: %s\n\n", decrypted_text);
-
-	//5) Verification
-	int success= strcmp(normalized_plain_text, decrypted_text);
-	if(success==0){
-		printf("It works.\n\n");
-	}else{
-		printf("#fail\n\n");
-	}
-
 	//Clean up everything that you own, (memory reserved with calloc, strdup & malloc)	
-	free(encrypted_text);
-	free(decrypted_text);
-	free(normalized_plain_text);
-	float clocks_diff= (float) clock() - initial_clock;	
-	printf("Processing time %e seconds\n", clocks_diff/CLOCKS_PER_SEC);
-	return success;
+	free(encrypted_text);	
+	free(normalized_plain_text);	
+	return 0;
 } 
