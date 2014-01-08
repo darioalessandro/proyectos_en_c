@@ -77,7 +77,7 @@ int main(){
 
 
 	//1) Plain Text	
-	char * plain_text= "Una oración.";
+	char * plain_text= "012345678912345";
 	printf("Plain text: %s\n\n", plain_text);	
 	
 	//2) Define key
