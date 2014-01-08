@@ -5,23 +5,19 @@
 
 char * normalize_plain_text_to_be_key_length_multiple(char * plain_text, int * key, int key_length){
 	char * normalized_plain_text=NULL;
-	int plain_text_length=strlen(plain_text);	
-	printf("original length %d\n",plain_text_length);	
-	int plain_text_mod_key_length=plain_text_length%key_length;
-	printf("plain_text_mod_key_length %d\n",plain_text_mod_key_length);	
+	int plain_text_length=strlen(plain_text);		
+	int plain_text_mod_key_length=plain_text_length%key_length;	
 	if(plain_text_mod_key_length!=0){		
 		int number_of_chars_to_add=key_length- plain_text_mod_key_length;
-		char bunch_of_spaces[number_of_chars_to_add];		
-		printf("number_of_chars_to_add %d\n",number_of_chars_to_add);		
+		char bunch_of_spaces[number_of_chars_to_add];				
 		memset(bunch_of_spaces,' ', number_of_chars_to_add);
 		char * pointer_to_last_element_of_bunch_of_spaces=&bunch_of_spaces[number_of_chars_to_add];
-		memset(pointer_to_last_element_of_bunch_of_spaces,0, 1);
-		printf("bunch_of_spaces %s\n",bunch_of_spaces);		
+		memset(pointer_to_last_element_of_bunch_of_spaces,0, 1);		
 		normalized_plain_text= calloc(plain_text_length+number_of_chars_to_add, sizeof(char));
-		sprintf(normalized_plain_text, "%s%s", plain_text, bunch_of_spaces);
-		printf("normalized_plain_text %s\n",normalized_plain_text);						
-	}	
-	printf("normalized length %lu\n",strlen(normalized_plain_text));
+		sprintf(normalized_plain_text, "%s%s", plain_text, bunch_of_spaces);		
+	}else{
+		normalized_plain_text=strdup(plain_text);
+	}
 	return normalized_plain_text;
 }
 
@@ -55,9 +51,7 @@ char * encrypt(char * plain_text,int * key, int key_length){
 
 char * decrypt(char * encrypted_text,int * key, int key_length){
 	int encrypted_text_length=strlen(encrypted_text);	
-	int number_of_blocks= (int) ceil(((float)encrypted_text_length/(float)key_length));
-	// printf("encrypted_text_length %d\n", encrypted_text_length);
-	// printf("number_of_blocks %d\n", number_of_blocks);
+	int number_of_blocks= (int) ceil(((float)encrypted_text_length/(float)key_length));	
 	char * decrypted_text= calloc(encrypted_text_length, sizeof(char));
 	for(int i=0; i<number_of_blocks;i++){		
 		for(int j=0;j<key_length;j++){	
@@ -66,10 +60,7 @@ char * decrypt(char * encrypted_text,int * key, int key_length){
 				break;	
 			}
 			int encrypted_text_index= i * key_length + index_of(j,key,key_length);			
-			decrypted_text[decrypted_text_index]= encrypted_text[encrypted_text_index];
-			// printf("decrypted_text[decrypted_text_index] %c\n", decrypted_text[decrypted_text_index]);
-			// printf("encrypted_text_index %d\n", encrypted_text_index);
-			// printf("decrypted_text_index %d\n", decrypted_text_index);
+			decrypted_text[decrypted_text_index]= encrypted_text[encrypted_text_index];			
 		}
 	}
 	return decrypted_text;
