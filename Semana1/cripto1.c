@@ -2,6 +2,7 @@
 #import <string.h>
 #import <math.h>
 #import <stdlib.h>
+#include <time.h>
 
 char * normalize_plain_text_to_be_key_length_multiple(char * plain_text, int * key, int key_length){
 	char * normalized_plain_text=NULL;
@@ -12,7 +13,7 @@ char * normalize_plain_text_to_be_key_length_multiple(char * plain_text, int * k
 		char bunch_of_spaces[number_of_chars_to_add];				
 		memset(bunch_of_spaces,' ', number_of_chars_to_add);
 		char * pointer_to_last_element_of_bunch_of_spaces=&bunch_of_spaces[number_of_chars_to_add];
-		memset(pointer_to_last_element_of_bunch_of_spaces,0, 1);		
+		memset(pointer_to_last_element_of_bunch_of_spaces,0, 1); //Added NULL character to mark the end of the string.		
 		normalized_plain_text= calloc(plain_text_length+number_of_chars_to_add, sizeof(char));
 		sprintf(normalized_plain_text, "%s%s", plain_text, bunch_of_spaces);		
 	}else{
@@ -68,6 +69,8 @@ int main(){
 	char * encrypt(char * plain_text,int * key, int key_length);
 	char * decrypt(char * encrypted_text,int * key, int key_length);
 	
+	const clock_t initial_time = clock();
+	
 	//1) Plain Text	
 	char * plain_text= "Metallica es una banda de thrash metal originaria de Los Ángeles, pero con base en San Francisco desde febrero de 1983. Fue fundada en 1981 en Los Ángeles por el danés Lars Ulrich y James Hetfield, a los que se les unirían Lloyd Grant y Ron McGovney. Estos dos músicos fueron después sustituidos por el guitarrista Dave Mustaine y el bajista Cliff Burton, Mustaine fue despedido un año después de ingresar en la banda debido a su excesiva adicción al alcohol y su actitud violenta, y fundó la banda Megadeth, siendo sustituido por Kirk Hammett ex guitarrista de Exodus. Por otra parte, en 1986, la muerte de Cliff Burton en un accidente de autobús en Suecia provocó la entrada al grupo de Jason Newsted,2 quien, tras su abandono quince años más tarde, sería sustituido por el bajista actual, Robert Trujillo.";
 	printf("Plain text: %s\n\n", plain_text);	
@@ -98,7 +101,7 @@ int main(){
 	free(encrypted_text);
 	free(decrypted_text);
 	free(normalized_plain_text);
-
-
+	float clocks_diff= (float) clock() - initial_time;	
+	printf("Processing time %f seconds\n", clocks_diff/CLOCKS_PER_SEC);
 	return success;
 } 
