@@ -2,7 +2,6 @@
 #import <string.h>
 #import <math.h>
 #import <stdlib.h>
-#include <time.h>
 
 char * normalize_plain_text_to_be_key_length_multiple(char * plain_text, int * key, int key_length){
 	char * normalized_plain_text=NULL;
