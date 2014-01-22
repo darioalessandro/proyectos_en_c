@@ -70,7 +70,7 @@ int main(){
 	const clock_t initial_clock = clock();
 	
 	//1) Plain Text	
-	char * plain_text= "Este es el mensaje que quiero proteger.";
+	char * plain_text= "No se distinguir entre besos y raíces no sé distinguir lo complicado de lo simple y ahora estás en mi lista de promesas a olvidar todo arde si le aplicas la chispa adecuada";
 	printf("--Text Soup--\n\n");	
 	printf("Plain text: %s\n\n", plain_text);	
 	
