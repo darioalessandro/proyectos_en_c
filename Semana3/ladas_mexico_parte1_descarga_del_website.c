@@ -89,11 +89,6 @@ static char * get_page (int socket_ref, const char * host, const char * page){
 
     status = send (socket_ref, request_message, strlen (request_message), 0);
 
-    /* Check it succeeded. The FreeBSD manual page doesn't mention
-       whether "send" sets errno, but
-       "http://pubs.opengroup.org/onlinepubs/009695399/functions/send.html"
-       claims it does. */
-
     fail (status == -1, "send failed: %s\n", strerror (errno));
     char * page_content= NULL;      
     int content_length=-1;  
@@ -153,6 +148,6 @@ char * download_page(char * host, char * protocol, char * page){
 int main (){    
     char * page_content= download_page("159.16.237.60","http", "numeracion.exe/info_tel?cld=462&telefono=6266452");    
     printf("page_content:\n%s\n", page_content);    
-    free(page_content);    
+    free(page_content);    //Liberar la memoria reservada por download_page. Esta es una función avanzada.
     return 0;
 }
