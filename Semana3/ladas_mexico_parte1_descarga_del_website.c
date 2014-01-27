@@ -57,65 +57,59 @@
 
 #define BSIZE 0x1000
 
+//*******No trate de analizar este metodo, utiliza muchas funciones avanzadas.
 static void fail (int test, const char * format, ...){
     if (test) {
-	va_list args;
-	va_start (args, format);
-	vfprintf (stderr, format, args);
-	va_end (args);
-	exit (EXIT_FAILURE);
+    va_list args;
+    va_start (args, format);
+    vfprintf (stderr, format, args);
+    va_end (args);
+    exit (EXIT_FAILURE);
     }
 }
 
-//No trate de analizar este metodo, utiliza muchas funciones avanzadas.
-static char * get_page (int socket_ref, const char * host, const char * page){    
-    char * request_message=NULL;
-
-    /* "format" is the format of the HTTP request we send to the web
-       server. */
+//*******No trate de analizar este metodo, utiliza muchas funciones avanzadas.
+static char * perform_http_get (int socket_ref, const char * host, const char * page){    
+    char * request_message=NULL;    
 
     const char * request_format =
         "GET /%s HTTP/1.0\r\nHost: %s\r\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.77 Safari/537.36\r\n\r\n";
 
     int status;
 
-    status = asprintf (&request_message, request_format, page, host);
-
-    /* Check that "asprintf" succeeded. */
+    status = asprintf (&request_message, request_format, page, host);    
 
     fail (status == -1 || ! request_message, "asprintf failed.\n");
-
-    /* Send the request. */
-
+    
     status = send (socket_ref, request_message, strlen (request_message), 0);
 
     fail (status == -1, "send failed: %s\n", strerror (errno));
     char * page_content= NULL;      
     int content_length=-1;  
 
-    while (1) {	 //Loop infinito puesto que siempre se va a cumplir esta condición.
-        int numero_de_bytes_recibidos;	
+    while (1) {  //Loop infinito puesto que siempre se va a cumplir esta condición.
+        int numero_de_bytes_recibidos;  
         char buffer_de_datos_recibidos[BSIZE+10];
-	
+    
         numero_de_bytes_recibidos = recvfrom (socket_ref, buffer_de_datos_recibidos, BSIZE, 0, 0, 0);
 
         if (numero_de_bytes_recibidos == 0) {
             break;
         }
-        fail (numero_de_bytes_recibidos == -1, "%s\n", strerror (errno));	
+        fail (numero_de_bytes_recibidos == -1, "%s\n", strerror (errno));   
         //Es necesario poner un null al final de cada bloque para que sea un string válido
         buffer_de_datos_recibidos[numero_de_bytes_recibidos] = '\0'; 
-		if(page_content==NULL){
-            asprintf(&page_content, "%s", buffer_de_datos_recibidos);			
-		}else{			
-			asprintf(&page_content, "%s%s", page_content, buffer_de_datos_recibidos);
-		} 	     
+        if(page_content==NULL){
+            asprintf(&page_content, "%s", buffer_de_datos_recibidos);           
+        }else{          
+            asprintf(&page_content, "%s%s", page_content, buffer_de_datos_recibidos);
+        }        
     }
-   	free (request_message);
-   	return page_content;
+    free (request_message);
+    return page_content;
 }
 
-//No trate de analizar este metodo, utiliza muchas funciones avanzadas.
+//*******No trate de analizar este metodo, utiliza muchas funciones avanzadas.
 char * download_page(char * host, char * protocol, char * page){
     struct addrinfo hints, *res, *res0;
     int error;    
@@ -138,7 +132,7 @@ char * download_page(char * host, char * protocol, char * page){
     }
     char * page_content=NULL;
     if (socket_ref != -1) {
-        page_content= get_page (socket_ref, host, page);          
+        page_content= perform_http_get(socket_ref, host, page);          
     }
     freeaddrinfo(res0);
     return page_content;
@@ -146,7 +140,7 @@ char * download_page(char * host, char * protocol, char * page){
 
 
 int main (){    
-    char * page_content= download_page("159.16.237.60","http", "numeracion.exe/info_tel?cld=462&telefono=6266452");    
+    char * page_content= download_page("159.16.237.60","http", "numeracion.exe/info_tel?cld=462&telefono=6266452");        
     printf("page_content:\n%s\n", page_content);    
     free(page_content);    //Liberar la memoria reservada por download_page. Esta es una función avanzada.
     return 0;
