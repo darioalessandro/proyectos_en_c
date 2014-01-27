@@ -68,7 +68,6 @@ static void fail (int test, const char * format, ...){
     }
 }
 
-//*******No trate de analizar este metodo, utiliza muchas funciones avanzadas.
 static char * perform_http_get (int socket_ref, const char * host, const char * page){    
     char * request_message=NULL;    
 
@@ -109,7 +108,6 @@ static char * perform_http_get (int socket_ref, const char * host, const char * 
     return page_content;
 }
 
-//*******No trate de analizar este metodo, utiliza muchas funciones avanzadas.
 char * download_page(char * host, char * protocol, char * page){
     struct addrinfo hints, *res, *res0;
     int error;    

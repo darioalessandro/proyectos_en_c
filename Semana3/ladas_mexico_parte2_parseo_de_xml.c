@@ -73,8 +73,10 @@ int main (){
     char * filename= "pagina_de_prueba.html";
 
     //Consultas extraidas de Chrome para acceder a la ciudad y compañía
+    //Cabe señalar que estamos transformando de char * a xmlChar * usando BAD_CAST que es una función de
+    //libxml.
     xmlChar * xpath_Expr_company= BAD_CAST "/html/body/form/div/table/tr[8]/td[2]/p/span[1]/b/span[1]";
-    xmlChar * xpath_Expr_city= BAD_CAST "/html/body/form/div/table/tr[3]/td[2]/p/span/b/span[1]";    
+    xmlChar * xpath_Expr_city   = BAD_CAST "/html/body/form/div/table/tr[3]/td[2]/p/span/b/span[1]";    
         
     //Código para cargar el archivo usando libxml
     doc = htmlReadFile(filename,"windows-1252",HTML_PARSE_NOWARNING | HTML_PARSE_NOERROR);
@@ -113,9 +115,13 @@ int main (){
     xmlNode *node_company = xpathObj_company->nodesetval->nodeTab[0];
     xmlNode *node_city = xpathObj_city->nodesetval->nodeTab[0];
     
+    char * company= (char *) xmlNodeGetContent(node_company);
+    char * city= (char *) xmlNodeGetContent(node_city);
+
     //Impresión de los resultados
-    printf("content_company %s\n\n", (char *) xmlNodeGetContent(node_company));
-    printf("content_city %s\n\n", (char *) xmlNodeGetContent(node_city));    
+
+    printf("compañía %s\n\n", company);
+    printf("ciudad %s\n\n", city);    
     
     //Limpieza de los objetos reservados
     xmlXPathFreeObject(xpathObj_company);
