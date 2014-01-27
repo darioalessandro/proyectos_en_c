@@ -62,54 +62,64 @@
 #import  <libxml/HTMLparser.h>
 
 int main (){    
+    //Declaración de variables
     xmlDocPtr doc;
     xmlXPathContextPtr xpathCtx; 
     xmlXPathObjectPtr xpathObj_company, xpathObj_city; 
+
+    //Ruta al archivo de prueba, en este caso, pagina de prueba debe de estar al mismo nivel que 
+    //este archivo.
+
     char * filename= "pagina_de_prueba.html";
-        
+
+    //Consultas extraidas de Chrome para acceder a la ciudad y compañía
     xmlChar * xpath_Expr_company= BAD_CAST "/html/body/form/div/table/tr[8]/td[2]/p/span[1]/b/span[1]";
     xmlChar * xpath_Expr_city= BAD_CAST "/html/body/form/div/table/tr[3]/td[2]/p/span/b/span[1]";    
         
-    /* Load XML document */    
+    //Código para cargar el archivo usando libxml
     doc = htmlReadFile(filename,"windows-1252",HTML_PARSE_NOWARNING | HTML_PARSE_NOERROR);
     if (doc == NULL) {
-    fprintf(stderr, "Error: unable to parse file \"%s\"\n", filename);
+    fprintf(stderr, "Error: no fue posible parsear el archivo \"%s\"\n", filename);
     return(-1);
     }
 
-    /* Create xpath evaluation context */
+    //Crear contexto de evaluación del XPath
     xpathCtx = xmlXPathNewContext(doc);
     if(xpathCtx == NULL) {
-        fprintf(stderr,"Error: unable to create new XPath context\n");
+        fprintf(stderr,"Error: No fue posible crear el contexto\n");
         xmlFreeDoc(doc); 
         return(-1);
     }
       
-    /* Evaluate xpath_Expr_company expression */
+    //Evaluación de las expresiones
     xpathObj_company = xmlXPathEvalExpression(xpath_Expr_company, xpathCtx);
     xpathObj_city = xmlXPathEvalExpression(xpath_Expr_city, xpathCtx);
+
     if(xpathObj_company == NULL) {
-        fprintf(stderr,"Error: unable to evaluate xpath expression \"%s\"\n", xpath_Expr_company);
+        fprintf(stderr,"Error: no se pudo evaluar la expresión \"%s\"\n", xpath_Expr_company);
         xmlXPathFreeContext(xpathCtx); 
         xmlFreeDoc(doc); 
         return(-1);
     }
 
     if(xpathObj_city == NULL) {
-        fprintf(stderr,"Error: unable to evaluate xpath expression \"%s\"\n", xpath_Expr_city);
+        fprintf(stderr,"Error: no se pudo evaluar la expresión \"%s\"\n", xpath_Expr_city);
         xmlXPathFreeContext(xpathCtx); 
         xmlFreeDoc(doc); 
         return(-1);
     }
 
+    //Parseo de los resultados de las expresiones.
     xmlNode *node_company = xpathObj_company->nodesetval->nodeTab[0];
     xmlNode *node_city = xpathObj_city->nodesetval->nodeTab[0];
     
+    //Impresión de los resultados
     printf("content_company %s\n\n", (char *) xmlNodeGetContent(node_company));
     printf("content_city %s\n\n", (char *) xmlNodeGetContent(node_city));    
     
-    /* Cleanup */
+    //Limpieza de los objetos reservados
     xmlXPathFreeObject(xpathObj_company);
+    xmlXPathFreeObject(xpathObj_city);
     xmlXPathFreeContext(xpathCtx); 
     xmlFreeDoc(doc); 
     return 0;
